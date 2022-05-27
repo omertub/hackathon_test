@@ -43,9 +43,7 @@ export class UserService {
         throw new UnauthorizedException(`Invalid username of password!`);
     }
 
-    return {
-        jwt_token: "jwt_token"
-    };
+    return "jwt_token";
   }
 
 }
