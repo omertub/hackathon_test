@@ -42,7 +42,7 @@ export class UserController {
             token = await this.userService.login(loginDto)
         }
         catch (err) {
-            return { status: RESPONSE_STATUS.INVAIL_USERNAME_OR_PASSWORD, token: null }
+            return { status: RESPONSE_STATUS.INVALID_USERNAME_OR_PASSWORD, token: null }
         }
         
         return { status: RESPONSE_STATUS.OK, token }
