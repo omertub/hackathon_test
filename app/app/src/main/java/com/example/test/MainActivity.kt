@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // subscribe to an event with via the WebSocket:
+        // subscribe to an event via the WebSocket:
         APIUtil.on("server2client") {
             runOnUiThread {
                 val msg = it.get("hello") as String
