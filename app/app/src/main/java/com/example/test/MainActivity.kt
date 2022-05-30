@@ -20,8 +20,8 @@ class MainActivity : AppCompatActivity() {
             APIUtil.getRequest("users") {
                 // the object 'it' is the JSONObject that contains the backend response
 
-                // this callback is running on the separate thread, so if we want
-                // to update the UI we need to run it in a UI thread
+                // this callback is running on a separate thread, so if we want
+                // to update the UI we need to run it on a UI thread
                 runOnUiThread {
                     Toast.makeText(this, it.toString(), Toast.LENGTH_LONG).show()
                 }
