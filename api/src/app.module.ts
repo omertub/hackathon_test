@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
+import { EventsGateway } from './events.gateway';
 import { UserModule } from './users/users.module';
 
 @Module({
@@ -10,6 +11,9 @@ import { UserModule } from './users/users.module';
     UserModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    EventsGateway
+  ],
 })
 export class AppModule {}
