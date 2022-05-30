@@ -1,6 +1,7 @@
 package com.example.parkswitchapp
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         val user = User(username_string, password_string)
         if (username_string =="admin" && password_string == "1234") {
             Toast.makeText(this,"LOGIN SUCCESFULL", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, MainPage::class.java))
         }
         else {
             Toast.makeText(this,"LOGIN FAILED", Toast.LENGTH_SHORT).show()
