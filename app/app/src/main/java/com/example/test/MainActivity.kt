@@ -2,43 +2,33 @@ package com.example.test
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.Toast
-import com.example.test.utils.APIUtil
-import org.json.JSONObject
-import kotlin.concurrent.thread
+import androidx.databinding.DataBindingUtil
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
+import com.example.test.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-
-    private val apiUtil = APIUtil()
+    private lateinit var drawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        findViewById<Button>(R.id.test_request_button).setOnClickListener {
-            val context = this
-            thread {
-                val response = apiUtil.getRequest("users")
-                context.runOnUiThread {
-                    Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
-                }
-            }
-        }
+        val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
 
-        findViewById<Button>(R.id.test_post_request_botton).setOnClickListener {
-            val context = this
-            thread {
-                // TODO: use JSON parser classes?
-                val response = apiUtil.postRequest("signup",
-                    JSONObject()
-                    .put("username", "yehonatan")
-                    .put("password", "123456")
-                )
-                context.runOnUiThread {
-                    Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
-                }
-            }
-        }
+        val navController = this.findNavController(R.id.myNavHostFragment)
+
+        drawerLayout = binding.drawerLayout
+
+        NavigationUI.setupActionBarWithNavController(this,navController)
+        NavigationUI.setupWithNavController(binding.navView, navController)
+        NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
+
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = this.findNavController(R.id.myNavHostFragment)
+        return NavigationUI.navigateUp(navController, drawerLayout)
     }
 }

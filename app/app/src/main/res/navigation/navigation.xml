@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/fragment_login">
+
+
+    <fragment
+        android:id="@+id/fragment_login"
+        android:name="com.example.test.fragment_login"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_fragment_login_to_fragment_options"
+            app:destination="@id/fragment_options" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_options"
+        android:name="com.example.test.fragment_options"
+        android:label="fragment_options"
+        tools:layout="@layout/fragment_options" >
+        <action
+            android:id="@+id/action_fragment_options_to_fragment_map"
+            app:destination="@id/fragment_map" />
+        <action
+            android:id="@+id/action_fragment_options_to_fragment_leave_parking"
+            app:destination="@id/fragment_leave_parking" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_map"
+        android:name="com.example.test.fragment_map"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" >
+        <action
+            android:id="@+id/action_fragment_map_to_fragment_user_data"
+            app:destination="@id/fragment_user_data" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_settings"
+        android:name="com.example.test.fragment_settings"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_fragment_settings_to_fragment_login"
+            app:destination="@id/fragment_login" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_user_data"
+        android:name="com.example.test.fragment_user_data"
+        android:label="fragment_user_data"
+        tools:layout="@layout/fragment_user_data" />
+    <fragment
+        android:id="@+id/fragment_leave_parking"
+        android:name="com.example.test.fragment_leave_parking"
+        android:label="fragment_leave_parking"
+        tools:layout="@layout/fragment_leave_parking" />
+</navigation>
