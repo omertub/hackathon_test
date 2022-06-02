@@ -19,7 +19,6 @@ class MainActivity : AppCompatActivity() {
             // send a get request for /users and run the callback:
             APIUtil.getRequest("users") {
                 // the object 'it' is the JSONObject that contains the backend response
-
                 // this callback is running on a separate thread, so if we want
                 // to update the UI we need to run it on a UI thread
                 runOnUiThread {
@@ -34,6 +33,7 @@ class MainActivity : AppCompatActivity() {
                 .put("username", "yehonatan")
                 .put("password", "123456")) {
                 runOnUiThread {
+                    it.get("staus")
                     Toast.makeText(this, it.toString(), Toast.LENGTH_LONG).show()
                 }
             }

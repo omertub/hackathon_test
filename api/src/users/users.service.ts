@@ -34,16 +34,16 @@ export class UserService {
     });
 
     if (!user) {
-        throw new UnauthorizedException(`Invalid username of password!`);
+        throw new UnauthorizedException(`Invalid username or password!`);
     }
 
     console.log("🚀 ~ file: users.service.ts ~ line 42 ~ UserService ~ login ~ user.password", user.password, loginDto.password)
     // just for testing!
     if (user.password !== loginDto.password) {
-        throw new UnauthorizedException(`Invalid username of password!`);
+        throw new UnauthorizedException(`Invalid username or password!`);
     }
 
-    return "jwt_token";
+    return user;
   }
 
 }

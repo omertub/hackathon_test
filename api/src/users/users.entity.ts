@@ -19,4 +19,7 @@ export class User {
   @Column({ length: 7 })
   salt: string;
 
+  @Column( { default: 100 })
+  tokens: number;
+
 }

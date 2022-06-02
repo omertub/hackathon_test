@@ -42,6 +42,7 @@ class APIUtil {
 
         fun on(eventName: String, callback: (payload: JSONObject) -> Any) {
             webSocket.on(eventName) {
+                webSocket.off(eventName) // will be triggered one-time
                 callback(it[0] as JSONObject)
             }
         }

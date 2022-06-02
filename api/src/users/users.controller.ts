@@ -36,16 +36,13 @@ export class UserController {
 
     @Post('login')
     async login(@Body() loginDto: LoginDto) {
-        let token: string;
-
         try {
-            token = await this.userService.login(loginDto)
+            const user = await this.userService.login(loginDto)
+            return { status: RESPONSE_STATUS.OK, user: user }
         }
         catch (err) {
-            return { status: RESPONSE_STATUS.INVALID_USERNAME_OR_PASSWORD, token: null }
+            return { status: RESPONSE_STATUS.INVALID_USERNAME_OR_PASSWORD, user: null }
         }
-        
-        return { status: RESPONSE_STATUS.OK, token }
     }
 
 }
