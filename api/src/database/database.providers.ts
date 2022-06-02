@@ -9,7 +9,7 @@ export const databaseProviders = [
         type: 'sqlite',
         database: './data/db.sqlite',
         entities: [
-            User
+          User
         ],
         logging: true,
         synchronize: true,

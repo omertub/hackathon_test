@@ -16,13 +16,24 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         findViewById<Button>(R.id.test_request_button).setOnClickListener {
-            // send a get request for /users and run the callback:
-            APIUtil.getRequest("users") {
+            // send a get request for /users and run the callback
+            // you can pass get parameter if you want like this: user?param1=value1&param2:value2
+            APIUtil.getRequest("user?userId=1") {
                 // the object 'it' is the JSONObject that contains the backend response
                 // this callback is running on a separate thread, so if we want
                 // to update the UI we need to run it on a UI thread
                 runOnUiThread {
-                    Toast.makeText(this, it.toString(), Toast.LENGTH_LONG).show()
+                    val status = it.get("status") as String
+                    if (status != "OK") {
+                        Toast.makeText(this, "Error! $status", Toast.LENGTH_LONG).show()
+                    }
+                    else {
+                        val user = it.get("user") as JSONObject
+                        val userId = user.get("id") as Int
+                        val username = user.get("username") as String
+                        Toast.makeText(this, "Welcome $username! (userId: $userId)", Toast.LENGTH_LONG).show()
+                    }
+
                 }
             }
         }

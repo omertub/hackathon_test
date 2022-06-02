@@ -9,17 +9,15 @@ export class User {
   @Column({ length: 30 })
   username: string;
 
-  // just for testing!
   @Column({ length: 64 })
   password: string;
-
-  @Column({ length: 64 })
-  hashedPassword: string;
-
-  @Column({ length: 7 })
-  salt: string;
 
   @Column( { default: 100 })
   tokens: number;
 
+  @Column({ default: null })
+  location: string;
+
+  @Column({ default: null })
+  parkerId: number;
 }

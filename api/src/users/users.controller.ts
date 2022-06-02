@@ -1,48 +1,94 @@
 import { Get, Post } from "@nestjs/common";
 import { Body } from "@nestjs/common";
+import { Query } from "@nestjs/common";
 import { Controller } from "@nestjs/common";
 import { RESPONSE_STATUS } from "src/consts/response.status";
-import { LoginDto } from "./dto/login.dto";
-import { SignupDto } from "./dto/signup.dto";
-import { User } from "./users.entity";
 import { UserService } from "./users.service";
 
 @Controller()
 export class UserController {
     constructor(private userService: UserService) { }
 
-    @Get('users')
-    async getUsers() {
+    // this is a GET endpoint, the full url will look like: http://10.0.2.2:3000/user?userId=1
+    // you can access the GET param userId using @Query
+    @Get('user')
+    async getUser(@Query('id') id: number) {
+        const user = await this.userService.findOne(id);
+
+        // if the user is not found
+        if (!user) {
+            // you always should return the response status with the appropriate code. 
+            return {
+                status: RESPONSE_STATUS.NOT_FOUND,
+                user: null
+            };
+        }
+
+        // everything is OK, return the user
         return {
             status: RESPONSE_STATUS.OK,
-            users: await this.userService.findAll(),
+            user: user,
         };
     }
 
+    @Get('users')
+    async getUsers() {
+        const users = await this.userService.findAll();
+
+        // you always should return the response status. 
+        return {
+            status: RESPONSE_STATUS.OK,
+            users: users,
+        };
+    }
+
+    // this is a POST endpoint, the full url will look like: http://<IPV6>:3000/signup
+    // you can access the request body using @Body.
     @Post('signup')
-    async signup(@Body() signupDto: SignupDto) {
-        let user: User;
+    async signup(@Body() signup: any) {
+        const user = await this.userService.signup(signup);
 
-        try {
-            user = await this.userService.signup(signupDto);
-        }
-        catch (err) {
-            console.log(err);
-            return { status: RESPONSE_STATUS.USERNAME_ALREADY_EXISTS, user: null };    
+        if (user === null) {
+            return { status: RESPONSE_STATUS.USERNAME_ALREADY_EXISTS, user: null }
         }
 
-        return { status: RESPONSE_STATUS.OK, user };
+        return { status: RESPONSE_STATUS.OK, user: user };
     }
 
     @Post('login')
-    async login(@Body() loginDto: LoginDto) {
-        try {
-            const user = await this.userService.login(loginDto)
-            return { status: RESPONSE_STATUS.OK, user: user }
-        }
-        catch (err) {
+    async login(@Body() login: any) {
+        const user = await this.userService.login(login)
+
+        if (user === null) {
             return { status: RESPONSE_STATUS.INVALID_USERNAME_OR_PASSWORD, user: null }
+        }
+
+        return { status: RESPONSE_STATUS.OK, user: user }
+    }
+
+    @Post('postParking')
+    async postParking(@Body() postParking: any) {
+        const user = await this.userService.postParking(postParking);
+        return {
+            status: RESPONSE_STATUS.OK   
         }
     }
 
+    @Get('markers')
+    async markers() {
+        const markers = await this.userService.findAllMarkers();
+        return {
+            status: RESPONSE_STATUS.OK,
+            markers: markers,
+        };
+    }
+
+    @Post('commitParking')
+    async commitParking(@Body() commitParking: any) {
+        const user = await this.userService.commitParking(commitParking);
+        // TODO: push event parkingCommited
+        return {
+            status: RESPONSE_STATUS.OK
+        }
+    }
 }
