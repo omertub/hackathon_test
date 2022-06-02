@@ -2,7 +2,7 @@ import { Get, Post } from "@nestjs/common";
 import { Body } from "@nestjs/common";
 import { Query } from "@nestjs/common";
 import { Controller } from "@nestjs/common";
-import { RESPONSE_STATUS } from "src/consts/response.status";
+import { RESPONSE_STATUS } from "src/consts";
 import { EventsGateway } from "src/events.gateway";
 import { UserService } from "./users.service";
 
@@ -89,14 +89,26 @@ export class UserController {
 
     @Post('commitParking')
     async commitParking(@Body() commitParking: any) {
-        const ownerUser = await this.userService.commitParking(commitParking);
-        const parkerUser = await this.userService.findOne(commitParking.id);
+        const { ownerUser, parkerUser } = await this.userService.commitParking(commitParking);
 
         this.eventsGateway.server.emit('parkingCommited', {
             id: ownerUser.id,
             parkerUser: parkerUser
         });
 
+        return {
+            status: RESPONSE_STATUS.OK,
+        }
+    }
+
+    @Post('park')
+    async park(@Body() park: any) {
+        const ownerUser = await this.userService.park(park);
+
+        this.eventsGateway.server.emit('parkingCompleted', {
+            id: ownerUser.id,
+        });
+        
         return {
             status: RESPONSE_STATUS.OK,
         }

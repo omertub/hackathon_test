@@ -1,5 +1,6 @@
 import { UnauthorizedException } from '@nestjs/common';
 import { Injectable, Inject } from '@nestjs/common';
+import { TOKENS_ADDITION } from 'src/consts';
 import { Repository } from 'typeorm';
 import { User } from './users.entity';
 
@@ -69,10 +70,45 @@ export class UserService {
   }
 
   async commitParking(commitParking: any) {
-    const user = await this.usersRepository.save({
+    let parkerUser = await this.usersRepository.findOne({
+      where: {
+        id: commitParking.id
+      }
+    })
+
+    const ownerUser = await this.usersRepository.save({
       id: commitParking.ownerId,
-      parkerId: commitParking.id
+      parkerId: parkerUser.id
     });
-    return user;
+
+    // subtract tokens from the parker
+    parkerUser = await this.usersRepository.save({
+      id: parkerUser.id,
+      tokens: parkerUser.tokens - TOKENS_ADDITION
+    })
+
+    return {
+      parkerUser: parkerUser,
+      ownerUser: ownerUser
+    };
   }
+
+  async park(park: any) {
+    // add tokens to the parking owner and clean the request:
+    const owenrUser = await this.usersRepository.findOne({
+      where: {
+        parkerId: park.id
+      }
+    });
+
+    const updatedUser = await this.usersRepository.save({
+      id: owenrUser.id,
+      tokens: owenrUser.tokens + TOKENS_ADDITION,
+      location: null,
+      parkerId: null
+    });
+
+    return updatedUser;
+  }
+
 }
