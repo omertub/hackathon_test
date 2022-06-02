@@ -3,11 +3,15 @@ import { Body } from "@nestjs/common";
 import { Query } from "@nestjs/common";
 import { Controller } from "@nestjs/common";
 import { RESPONSE_STATUS } from "src/consts/response.status";
+import { EventsGateway } from "src/events.gateway";
 import { UserService } from "./users.service";
 
 @Controller()
 export class UserController {
-    constructor(private userService: UserService) { }
+    constructor(
+        private userService: UserService,
+        private eventsGateway: EventsGateway
+    ) { }
 
     // this is a GET endpoint, the full url will look like: http://10.0.2.2:3000/user?userId=1
     // you can access the GET param userId using @Query
@@ -85,10 +89,16 @@ export class UserController {
 
     @Post('commitParking')
     async commitParking(@Body() commitParking: any) {
-        const user = await this.userService.commitParking(commitParking);
-        // TODO: push event parkingCommited
+        const ownerUser = await this.userService.commitParking(commitParking);
+        const parkerUser = await this.userService.findOne(commitParking.id);
+
+        this.eventsGateway.server.emit('parkingCommited', {
+            id: ownerUser.id,
+            parkerUser: parkerUser
+        });
+
         return {
-            status: RESPONSE_STATUS.OK
+            status: RESPONSE_STATUS.OK,
         }
     }
 }

@@ -68,8 +68,10 @@ export class UserService {
   }
 
   async commitParking(commitParking: any) {
-    // TODO:
-    // const user = await this.usersRepository.save(postParking);
-    // return user;
+    const user = await this.usersRepository.save({
+      id: commitParking.ownerId,
+      parkerId: commitParking.id
+    });
+    return user;
   }
 }
