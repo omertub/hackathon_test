@@ -31,11 +31,12 @@ export class UserService {
     return markerUsers;
   }
 
-  async signup(signupDto: any): Promise<User> {
+  async signup(signup: any): Promise<User> {
     try {
       // will throw an exception when the username already exists,
       // because the username colume is Unique.
-      const user = await this.usersRepository.save(signupDto);
+      const user = await this.usersRepository.save(signup);
+
       return user;
     } 
     catch {
@@ -43,10 +44,10 @@ export class UserService {
     }
   }
 
-  async login(loginDto: any) {
+  async login(login: any) {
     const user = await this.usersRepository.findOne({
       where: {
-        username: loginDto.username
+        username: login.username
       }
     });
 
@@ -55,7 +56,7 @@ export class UserService {
     } 
 
     // TODO: better security...
-    if (user.password !== loginDto.password) {
+    if (user.password !== login.password) {
       return null;
     }
 

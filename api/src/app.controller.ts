@@ -1,7 +1,9 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Post, Query, Req, Res } from '@nestjs/common';
+import { existsSync, statSync } from 'fs';
 import { AppService } from './app.service';
 import { RESPONSE_STATUS } from './consts/response.status';
 import { EventsGateway } from './events.gateway';
+import { Response } from 'express';
 
 @Controller()
 export class AppController {

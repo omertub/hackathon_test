@@ -1,4 +1,5 @@
 
+import { EventsGateway } from 'src/events.gateway';
 import { DataSource } from 'typeorm';
 import { User } from './users.entity';
 
@@ -9,4 +10,5 @@ export const usersProviders = [
     useFactory: (dataSource: DataSource) => dataSource.getRepository(User),
     inject: ['DATA_SOURCE'],
   },
+  EventsGateway
 ];
